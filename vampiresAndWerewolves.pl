@@ -30,35 +30,35 @@ move(state(WV, WW, EV, EW, e), state(New_WV, New_WW, New_EV, New_EW, w)) :-
     New_EW is EW-1,
     New_WW is WW+1,
     not(unsafe(New_WV, New_WW, New_EV, New_EW)),
-    writelist(['east->west boat, -1 east vamp and wolf, +1 west vamp and wolf', WV, WW, EV, EW, w]).
+    writelist(['east->west boat, -1 east vamp and wolf, +1 west vamp and wolf']).
 
 move(state(WV, WW, EV, EW, e), state(New_WV, WW, New_EV, EW, w)) :-
     EV > 1,
     New_EV is EV-2,
     New_WV is WV+2,
     not(unsafe(New_WV, WW, New_EV, EW)),
-    writelist(['east->west boat, -2 east vamp, +2 west vamp', WV, WW, EV, EW, w]).
+    writelist(['east->west boat, -2 east vamp, +2 west vamp']).
     
 move(state(WV, WW, EV, EW, e), state(WV, New_WW, EV, New_EW, w)) :-
     EW > 1,
     New_EW is EW-2,
     New_WW is WW+2,
     not(unsafe(WV, New_WW, EV, New_EW)),
-    writelist(['east->west boat, -2 east wolf, +2 west wolf', WV, WW, EV, EW, w]).
+    writelist(['east->west boat, -2 east wolf, +2 west wolf']).
         
 move(state(WV, WW, EV, EW, e), state(New_WV, WW, New_EV, EW, w)) :-
     EV > 0,
     New_EV is EV-1,
     New_WV is WV+1,
     not(unsafe(New_WV, WW, New_EV, EW)),
-    writelist(['east->west boat, -1 east vamp, +1 west vamp', WV, WW, EV, EW, w]).
+    writelist(['east->west boat, -1 east vamp, +1 west vamp']).
 
 move(state(WV, WW, EV, EW, e), state(WV, New_WW, EV, New_EW, w)) :-
     EW > 0,
     New_EW is EW-1,
     New_WW is WW+1,
     not(unsafe(WV, New_WW, EV, New_EW)),
-    writelist(['east->west boat, -1 east wolf, +1 west wolf', WV, WW, EV, EW, w]).
+    writelist(['east->west boat, -1 east wolf, +1 west wolf']).
     
 move(state(WV, WW, EV, EW, w), state(New_WV, New_WW, New_EV, New_EW, e)) :-
     WV > 0, WW > 0,
@@ -67,35 +67,35 @@ move(state(WV, WW, EV, EW, w), state(New_WV, New_WW, New_EV, New_EW, e)) :-
     New_EW is EW+1,
     New_WW is WW-1,
     not(unsafe(New_WV, New_WW, New_EV, New_EW)),
-    writelist(['west->east, -1 west vamp and wolf and +1 east vamp andwolf', WV, WW, EV, EW, e]).
+    writelist(['west->east, -1 west vamp and wolf and +1 east vamp andwolf']).
    
 move(state(WV, WW, EV, EW, w), state(New_WV, WW, New_EV, EW, e)) :-
     WV > 1,
     New_EV is EV+2,
     New_WV is WV-2,
     not(unsafe(New_WV, WW, New_EV, EW)),
-    writelist(['west->east, -2 west vamps and +2 east vamps', WV, WW, EV, EW, e]).
+    writelist(['west->east, -2 west vamps and +2 east vamps']).
   
 move(state(WV, WW, EV, EW, w), state(WV, New_WW, EV, New_EW, e)) :-
     WW > 1,
     New_EW is EW+2,
     New_WW is WW-2,
     not(unsafe(WV, New_WW, EV, New_EW)),
-    writelist(['west->east, -2 west wolves and +2 east wolves', WV, WW, EV, EW, e]).
+    writelist(['west->east, -2 west wolves and +2 east wolves']).
     
 move(state(WV, WW, EV, EW, w), state(New_WV, WW, New_EV, EW, e)) :-
     WV > 0,
     New_EV is EV+1,
     New_WV is WV-1,
     not(unsafe(New_WV, WW, New_EV, EW)),
-    writelist(['west->east, -1 west vamp and +1 east vamp', WV, WW, EV, EW, e]).
+    writelist(['west->east, -1 west vamp and +1 east vamp']).
     
 move(state(WV, WW, EV, EW, w), state(WV, New_WW, EV, New_EW, e)) :-
     WW > 0,
     New_EW is EW + 1,
     New_WW is WW - 1,
     not(unsafe(WV, New_WW, EV, New_EW)),
-    writelist(['west->east, -1 west wolf and +1 east wolf', WV, WW, EV, EW, e]).
+    writelist(['west->east, -1 west wolf and +1 east wolf']).
 
 
 % path predicates taken from Luger Chapter 4.2 
@@ -112,7 +112,7 @@ path(Goal, Goal, Been_stack) :-
 path(State, Goal, Been_stack) :- 
     move(State, Next_state), 
     not(member_stack(Next_state, Been_stack)), 
-    stack(Next_state, Been_stack, New_been_stack), 
+    stack(Next_state, Been_stack, New_been_stack),
     path(Next_state, Goal, New_been_stack), !.
 
 
@@ -125,8 +125,18 @@ test :- go(state(0,0,3,3,e), state(3,3,0,0,w)).
 
 writelist([ ]). writelist([H | T]) :- write(H), nl, writelist(T).
 
+showValidMoves(State, ValidMoves) :-
+    findall(NextState, move(State,NextState), ValidMoves).
+
+checkEquivalentState(state(WV, WW, EV, EW, B), state(New_WV, New_WW, New_EV, New_EW, New_B)) :-
+    WV = New_WV,
+    WW = New_WW,
+    EV = New_EV,
+    EW = New_EW,
+    B = New_B.
+
 % test_initial_move :-
-%    InitialState = state(0,0,3,3, e),
+%    InitialState = state(0,0,3,3,e),
 %    move(InitialState, NextState),
 %    writelist(NextState).
 
