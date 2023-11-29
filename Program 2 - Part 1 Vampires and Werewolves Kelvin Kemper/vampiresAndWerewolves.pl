@@ -1,4 +1,4 @@
-:- [bfs],[adt_luger].
+:- [adt_luger].
 
 
 % state(WV, WW, EV, EW, Boat)
@@ -30,36 +30,41 @@ move(state(WV, WW, EV, EW, e), state(New_WV, New_WW, New_EV, New_EW, w)) :-
     New_EW is EW-1,
     New_WW is WW+1,
     not(unsafe(New_WV, New_WW, New_EV, New_EW)),
-    writelist(['east->west boat, -1 east vamp and wolf, +1 west vamp and wolf']).
+    writelist(['east->west boat, -1 east vamp and wolf, +1 west vamp and wolf', 
+        state(New_WV, New_WW, New_EV, New_EW, w)]).   
 
 move(state(WV, WW, EV, EW, e), state(New_WV, WW, New_EV, EW, w)) :-
     EV > 1,
     New_EV is EV-2,
     New_WV is WV+2,
     not(unsafe(New_WV, WW, New_EV, EW)),
-    writelist(['east->west boat, -2 east vamp, +2 west vamp']).
-    
+    writelist(['east->west boat, -2 east vamp, +2 west vamp', 
+        state(New_WV, WW, New_EV, EW, w)]).
+
 move(state(WV, WW, EV, EW, e), state(WV, New_WW, EV, New_EW, w)) :-
     EW > 1,
     New_EW is EW-2,
     New_WW is WW+2,
     not(unsafe(WV, New_WW, EV, New_EW)),
-    writelist(['east->west boat, -2 east wolf, +2 west wolf']).
+    writelist(['east->west boat, -2 east wolf, +2 west wolf', 
+        state(WV, New_WW, EV, New_EW, w)]).
         
 move(state(WV, WW, EV, EW, e), state(New_WV, WW, New_EV, EW, w)) :-
     EV > 0,
     New_EV is EV-1,
     New_WV is WV+1,
     not(unsafe(New_WV, WW, New_EV, EW)),
-    writelist(['east->west boat, -1 east vamp, +1 west vamp']).
+    writelist(['east->west boat, -1 east vamp, +1 west vamp',
+        state(New_WV, WW, New_EV, EW, w)]).
 
 move(state(WV, WW, EV, EW, e), state(WV, New_WW, EV, New_EW, w)) :-
     EW > 0,
     New_EW is EW-1,
     New_WW is WW+1,
     not(unsafe(WV, New_WW, EV, New_EW)),
-    writelist(['east->west boat, -1 east wolf, +1 west wolf']).
-    
+    writelist(['east->west boat, -1 east wolf, +1 west wolf',
+        state(WV, New_WW, EV, New_EW, w)]).
+     
 move(state(WV, WW, EV, EW, w), state(New_WV, New_WW, New_EV, New_EW, e)) :-
     WV > 0, WW > 0,
     New_EV is EV+1,
@@ -67,42 +72,46 @@ move(state(WV, WW, EV, EW, w), state(New_WV, New_WW, New_EV, New_EW, e)) :-
     New_EW is EW+1,
     New_WW is WW-1,
     not(unsafe(New_WV, New_WW, New_EV, New_EW)),
-    writelist(['west->east, -1 west vamp and wolf and +1 east vamp andwolf']).
+    writelist(['west->east, -1 west vamp and wolf and +1 east vamp andwolf',
+        state(New_WV, New_WW, New_EV, New_EW, e)]).
    
 move(state(WV, WW, EV, EW, w), state(New_WV, WW, New_EV, EW, e)) :-
     WV > 1,
     New_EV is EV+2,
     New_WV is WV-2,
     not(unsafe(New_WV, WW, New_EV, EW)),
-    writelist(['west->east, -2 west vamps and +2 east vamps']).
-  
+    writelist(['west->east, -2 west vamps and +2 east vamps', 
+        state(New_WV, WW, New_EV, EW, e)]).
+
 move(state(WV, WW, EV, EW, w), state(WV, New_WW, EV, New_EW, e)) :-
     WW > 1,
     New_EW is EW+2,
     New_WW is WW-2,
     not(unsafe(WV, New_WW, EV, New_EW)),
-    writelist(['west->east, -2 west wolves and +2 east wolves']).
-    
+    writelist(['west->east, -2 west wolves and +2 east wolves',
+        state(WV, New_WW, EV, New_EW, e)]).
+
 move(state(WV, WW, EV, EW, w), state(New_WV, WW, New_EV, EW, e)) :-
     WV > 0,
     New_EV is EV+1,
     New_WV is WV-1,
     not(unsafe(New_WV, WW, New_EV, EW)),
-    writelist(['west->east, -1 west vamp and +1 east vamp']).
+    writelist(['west->east, -1 west vamp and +1 east vamp', 
+        state(New_WV, WW, New_EV, EW, e)]).
     
 move(state(WV, WW, EV, EW, w), state(WV, New_WW, EV, New_EW, e)) :-
     WW > 0,
     New_EW is EW + 1,
     New_WW is WW - 1,
     not(unsafe(WV, New_WW, EV, New_EW)),
-    writelist(['west->east, -1 west wolf and +1 east wolf']).
-
+    writelist(['west->east, -1 west wolf and +1 east wolf', 
+        state(WV, New_WW, EV, New_EW, e)]).
 
 % path predicates taken from Luger Chapter 4.2 
 % base case path predicate, when current state is goal state,
 % reverse print the stack to show solution
 path(Goal, Goal, Been_stack) :- 
-    write('Solution Path Is: ' ), nl, 
+    nl, write('Solution Path Is: ' ), nl, 
     reverse_print_stack(Been_stack).
 
 % checks whether a state is a valid next state.
@@ -125,6 +134,7 @@ test :- go(state(0,0,3,3,e), state(3,3,0,0,w)).
 
 writelist([ ]). writelist([H | T]) :- write(H), nl, writelist(T).
 
+%% findall build-in predicate info from https://www.cse.unsw.edu.au/~billw/dictionaries/prolog/findall.html
 showValidMoves(State, ValidMoves) :-
     findall(NextState, move(State,NextState), ValidMoves).
 

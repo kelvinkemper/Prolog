@@ -1,3 +1,4 @@
+%%%%% From Luger AI Algorithms, Data Structures and Idioms in Prolog, Lisp, and Java Chapter 3.
 
 empty_stack([ ]). 
 

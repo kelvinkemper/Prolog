@@ -27,11 +27,12 @@ unsafe predicates have an enormous amount of different way to represent them. Si
 are the same thing except the amount, representing them as numbers made more sense and would reduce the rules needed
 to complete the problem.
 
+Source file information:
+Some of the source files such as the adt_luger.pl and a couple of predicates in the vampiresAndWerewolves.pl were
+taken from Luger's supplementary AI Algorithms, Data Structures and Idioms in Prolog, Lisp, and Java book. 
+adt_luger.pl - Chapter 3 and vampiresAndWerewolves.pl predicates from Chapter 4.
 
-
-### How to run the file:
-
-SWI Prolog
+### How to run the file in SWI Prolog ###
 
 ## This will load the file in prolog.
 ?- [vampiresAndWerewolves]. 
@@ -41,9 +42,10 @@ SWI Prolog
 ?- test.
 
 
-## showValidMoves uses the syntax
+## showValidMoves will show all valid next states for the one you've input
+## it uses the syntax
 ?-showValidMoves(state(1,1,3,3,w)).
 
 ## checkEquivalentState will check if 2 states are equivalent.
-?- checkEquivalentState(state(3,3,0,0,e), state(3,3,0,0,e) 
+?- checkEquivalentState(state(3,3,0,0,e), state(3,3,0,0,e)).
 True.
